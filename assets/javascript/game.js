@@ -79,30 +79,120 @@
 
 
 
-// Variables
+/*****************************************************************************
+ ******************************* Begin Program *******************************
+ *****************************************************************************/
+
+
+
+
+
+/**********
+ * Arrays *
+ **********/
+const alphabetArray = [
+  "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", 
+  "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+];
+
+let guessedLetterArray = [];
+/*-------------------------*/
+
+
+
+
+
+/*************
+ * Variables *
+ *************/
 let winCountTotal = 0;
 
 let lossCountTotal = 0;
 
 let guessesRemaining = 9;
 
-let secretRandomLetter;
-
-
-
-
-
-// Arrays
-const alphabetArray = [
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", 
-        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+let secretRandomLetter = alphabetArray[
+  Math.floor(Math.random() * alphabetArray.length - 1)
 ];
-
-let guessedLetterArray = [];
-
+/*-------------------------*/
 
 
 
 
-// Functions
-secretRandomLetter = alphabetArray[Math.ceil(Math.random() * 26)]
+
+/*************
+ * Functions *
+ *************/
+
+// Listen for keypress events
+document.addEventListener('keypress', (event) => {
+
+  // Declare variable, assign it the value of keypress
+  let userGuess = event.key.toLowerCase();
+
+  // Only pass letters to game engine
+  if (alphabetArray.indexOf(userGuess) !== -1) {
+    gameEngine(userGuess);
+  }
+
+});
+
+// Game engine that calls the shots
+function gameEngine(userGuess) {
+  // call function the checks to see if a match
+  testForMatch(userGuess);
+  // call function to update DOM
+  // call function that adds 
+}
+
+function updateDOM() {
+  document.getElementById("js-win-count").innerHTML = winCountTotal;
+  document.getElementById("js-loss-count").innerHTML = lossCountTotal;
+  document.getElementById("js-guesses-remaining").innerHTML = guessesRemaining;
+  document.getElementById("js-guesses-so-far").innerHTML = guessedLetterArray;
+}
+
+function addGuessToArray(guess) {
+  guessedLetterArray.push(guess);
+  console.log(`Guesses so far are ${guessedLetterArray}`);
+}
+
+function testForMatch(userLetterGuess) {
+  if (userLetterGuess === secretRandomLetter) {
+    incrementWinCountTotal();
+  } else {
+    incrementLossCountTotal();
+  }
+}
+
+function isGameOver() {
+  if (guessesRemaining <= 0) {
+    incrementLossCountTotal();
+  }
+}
+
+function incrementWinCountTotal() {
+  winCountTotal++;
+  alertUserOfWin();
+}
+
+function incrementLossCountTotal() {
+  lossCountTotal++;
+  alertUserOfLoss();
+}
+
+function alertUserOfWin() {
+  alert(`Congrats! You won that round!\n\n*The letter I was thinking of was: ${secretRandomLetter}`);
+  resetGame();
+}
+
+function alertUserOfLoss() {
+  alert(`Too bad, so sad... You lost that round!\n\nThe letter I was thinking of was: ${secretRandomLetter}`);
+  resetGame();
+}
+
+function resetGame() {
+  guessesRemaining = 9;
+  guessedLetterArray = [];
+}
+/*-------------------------*/
