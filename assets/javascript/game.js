@@ -33,6 +33,7 @@
  *   reset js-guesses-remaining to default value
  * 
  * but if button pressed doesn't match random letter variable
+ *   
  *   decrement js-guesses-remaining
  * 
  * if js-guesses-remaining equals zero
@@ -46,7 +47,62 @@
 
 
 
-// Function list:
+// Program components:
 /*
-
+ * variables
+ *   winCountTotal - keeps track of total number of wins
+ *   lossCountTotal - keeps track of total number of losses
+ *   guessesRemaining - keeps track of number of remaining guesses
+ *   secretRandomLetter - stores the value of the randomly selected letter
+ * 
+ * arrays
+ *   array of alphabetArray, static
+ *   array of guessedLetters, dynamic
+ * 
+ * functions/things program needs to do
+ *   select randomized letter from alphabet array, store in variable
+ *   event listener, listens for keyboard button presses (ignores non-letters)
+ *   makes letters guessed lowercase
+ *   adds letter to guessedLetters array
+ *   check to see if letter guessed matches random letter
+ *   increments winCountTotal
+ *   increments lossCountTotal
+ *   decrements guessesRemaining
+ *   update/refresh DOM elements with each new incorrect guess
+ *   alert user to a win
+ *   alert user to a loss
+ *   alert user to the secret hidden letter when win/loss occurs
+ *   reset guessesRemaining and guessedLetters
 */
+
+
+
+
+
+// Variables
+let winCountTotal = 0;
+
+let lossCountTotal = 0;
+
+let guessesRemaining = 9;
+
+let secretRandomLetter;
+
+
+
+
+
+// Arrays
+const alphabetArray = [
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", 
+        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+];
+
+let guessedLetterArray = [];
+
+
+
+
+
+// Functions
+secretRandomLetter = alphabetArray[Math.ceil(Math.random() * 26)]
