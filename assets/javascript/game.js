@@ -68,8 +68,6 @@ function inputIsValid(userInput) {
     return false;
   }
 }
-/*----------------------------------------------------------------------------*/
-
 
 /************************ If player guesses correctly *************************/
 function letterIsMatch(guess) {
@@ -84,8 +82,6 @@ function incrementWinCountTotal() {
 function alertUserOfWin() {
   alert(`You won that round!\n\nThe letter was: ${secretLetter}`);
 }
-/*----------------------------------------------------------------------------*/
-
 
 /********************** If a player guesses incorrectly ***********************/
 function decrementGuessesLeft() {
@@ -95,8 +91,6 @@ function decrementGuessesLeft() {
 function addToGuessArray(guess) {
   lettersGuessed.push(guess);
 }
-/*----------------------------------------------------------------------------*/
-
 
 /********************** If a player runs out of guesses ***********************/
 function gameIsOver() {
@@ -111,8 +105,6 @@ function alertUserOfLoss() {
 function incrementLossCountTotal() {
   lossCountTotal++;
 }
-/*----------------------------------------------------------------------------*/
-
 
 /************************* Reset game for next round **************************/
 function resetGame() {
@@ -120,8 +112,6 @@ function resetGame() {
   lettersGuessed = [];
   generateRandomLetter();
 }
-/*----------------------------------------------------------------------------*/
-
 
 /*************************** Update page elements *****************************/
 function renderDOM() {
@@ -130,9 +120,4 @@ function renderDOM() {
   document.getElementById("js-guesses-remaining").innerHTML = guessesRemaining;
   document.getElementById("js-guesses-so-far").innerHTML = lettersGuessed;
 }
-/*----------------------------------------------------------------------------*/
-
-
-/*============================================================================*
- *----------------------------------- End ------------------------------------*
- *============================================================================*/
+/*___________________________________________________________________________*/
