@@ -125,15 +125,15 @@ let secretRandomLetter = "";
 // call function that generates psuedo-random letter
 generateRandomLetter();
 
-// Listen for keypress events
+// If key pressed, called function to validate
 document.addEventListener('keypress', (event) => {
   let userGuess = event.key.toUpperCase();
-  qualifyInput(userGuess);
+  validateInput(userGuess);
 });
 
 
 // Only pass to game engine 1) letters 2) not-previously-guessed
-function qualifyInput(userInput) {
+function validateInput(userInput) {
   if (alphabetArray.indexOf(userInput) !== -1 &&
       guessedLetterArray.indexOf(userInput) === -1) 
   {
