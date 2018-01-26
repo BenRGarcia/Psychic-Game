@@ -53,10 +53,10 @@
  *   winCountTotal - keeps track of total number of wins
  *   lossCountTotal - keeps track of total number of losses
  *   guessesRemaining - keeps track of number of remaining guesses
- *   secretRandomLetter - stores the value of the randomly selected letter
+ *   secretLetter - stores the value of the randomly selected letter
  * 
  * arrays
- *   array of alphabetArray, static
+ *   array of alphabet, static
  *   array of guessedLetters, dynamic
  * 
  * functions/things program needs to do
@@ -90,16 +90,35 @@
 /**********
  * Arrays *
  **********/
-const alphabetArray = [
+const alphabet = [
   "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
   "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 ];
 
-let guessedLetterArray = [];
+let lettersGuessed = [];
 /*-------------------------*/
 
 
+/*
+scratchpad: initial state object?
 
+const gameState = {
+  winCountTotal: 0,
+  lossCountTotal: 0,
+  guessesRemaining: 9,
+  secretLetter: "",
+
+  validateInput(guess) {
+    if (alphabet.indexOf(userInput) !== -1 && lettersGuessed.indexOf(userInput) === -1) {
+    this.secretLetter = guess;
+    } else {
+      return false;
+    }
+  }
+
+};
+
+*/
 
 
 /*************
@@ -111,7 +130,7 @@ let lossCountTotal = 0;
 
 let guessesRemaining = 9;
 
-let secretRandomLetter = "";
+let secretLetter = "";
 /*-------------------------*/
 
 
@@ -122,70 +141,38 @@ let secretRandomLetter = "";
  * Functions *
  *************/
 
-// call function that generates psuedo-random letter
-generateRandomLetter();
 
-// If key pressed, called function to validate
 document.addEventListener('keypress', (event) => {
-  let userGuess = event.key.toUpperCase();
-  validateInput(userGuess);
+  let guess = event.key.toUpperCase();
+  gameEngine(guess)
 });
 
-
-// Only pass to game engine 1) letters 2) not-previously-guessed
-function validateInput(userInput) {
-  if (alphabetArray.indexOf(userInput) !== -1 &&
-      guessedLetterArray.indexOf(userInput) === -1) 
-  {
-    gameEngine(userInput);
+function gameEngine(guess) {
+  if (validateInput(guess)) {
+    addGuessToArray(guess);
+    
+    if (testForMatch(guess)) {
+      incrementWinCountTotal();
+      alertUserOfWin();
+    }
   }
+
+  isGameOver ? alertUserOfLoss(): decrementGuessesLeft();
 }
 
 
-// Game engine that calls the shots
-function gameEngine(userGuess) {
-  renderDOM();
-
-  // call function that adds the guessed letter to array
-  addGuessToArray(userGuess);
-  renderDOM();
-
-  // call function the checks to see if a match
-  testForMatch(userGuess);
-  renderDOM();
-
-  // call function that tests if game is over
-  if (guessesRemaining <= 0) {
-    incrementLossCountTotal();
-    renderDOM();
-    alertUserOfLoss();
-    renderDOM();
-  }
+function isGameOver() {
+  if (guessesRemaining <= 0) return true;
+  else return false;
 }
 
 function generateRandomLetter() {
-  secretRandomLetter = alphabetArray[Math.floor(Math.random() * alphabetArray.length - 1)];
-}
-
-// A function that updates the DOM
-function renderDOM() {
-  document.getElementById("js-win-count").innerHTML = winCountTotal;
-  document.getElementById("js-loss-count").innerHTML = lossCountTotal;
-  document.getElementById("js-guesses-remaining").innerHTML = guessesRemaining;
-  document.getElementById("js-guesses-so-far").innerHTML = guessedLetterArray;
+  let secretLetter = alphabet[Math.floor(Math.random() * alphabet.length - 1)];
+  return secretLetter;
 }
 
 function addGuessToArray(guess) {
-  guessedLetterArray.push(guess);
-}
-
-function testForMatch(userLetterGuess) {
-  if (userLetterGuess === secretRandomLetter) {
-    incrementWinCountTotal();
-    alertUserOfWin();
-  } else {
-    decrementGuessesLeft();
-  }
+  lettersGuessed.push(guess);
 }
 
 function incrementWinCountTotal() {
@@ -201,19 +188,32 @@ function decrementGuessesLeft() {
 }
 
 function alertUserOfWin() {
-  alert(`CONGRATS! You won that round!\n\n*The letter I was thinking of was: ${secretRandomLetter}`);
-  resetGame();
+  alert(`You won that round!\n\n*The letter I was thinking was: ${secretLetter}`);
 }
 
 function alertUserOfLoss() {
-  alert(`Too bad, so sad... You lost that round!\n\nThe letter I was thinking of was: ${secretRandomLetter}\nBetter luck next time!`);
-  resetGame();
+  alert(`You lost that round!\n\nThe letter I was thinking was: ${secretLetter}`);
+}
+
+function renderDOM() {
+  document.getElementById("js-win-count").innerHTML = winCountTotal;
+  document.getElementById("js-loss-count").innerHTML = lossCountTotal;
+  document.getElementById("js-guesses-remaining").innerHTML = guessesRemaining;
+  document.getElementById("js-guesses-so-far").innerHTML = lettersGuessed;
+}
+
+function testForMatch(guess) {
+  if (guess === secretLetter) return true;
+  else return false;
 }
 
 function resetGame() {
   guessesRemaining = 9;
-  guessedLetterArray = [];
-  renderDOM();
-  generateRandomLetter();
+  lettersGuessed = [];
 }
-/*-------------------------*/
+
+// Only pass to game engine 1) letters 2) not-previously-guessed
+function validateInput(userInput) {
+  if (alphabet.indexOf(userInput) !== -1 && lettersGuessed.indexOf(userInput) === -1) return true;
+  else return false;
+}
